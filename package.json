@@ -1,0 +1,21 @@
+{
+	"name": "LogiblockIDE-LaunchUpdate",
+	"version": "0.0.1",
+	"private": true,
+	"description": "Logiblock IDE Launch/auto-update component",
+	"license": "Proprietary",
+
+	"main": "Launchupdate.html",
+	"window":
+	{
+		"toolbar": true
+	},
+	"dependencies":
+	{
+		"moduleverse": ">=0.1.5",
+		"q": "0.9.6"
+	},
+	"devDependencies":
+	{
+	}
+}

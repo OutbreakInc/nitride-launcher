@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!-- Based on Bootstrap from Twitter ( http://twitter.github.com/bootstrap/ ) - thanks, guys! -->
+<html lang="en">
+<head>
+	<meta charset="utf-8"/>
+	<title>Logiblock IDE</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta name="description" content="Logiblock IDE Launcher"/>
+	<meta name="author" content="Outbreak, Inc."/>
+	
+	<link rel="stylesheet" type="text/css" href="static/bootstrap-2.3.1/bootstrap-2.3.1.min.css" media="screen"/>
+	<link rel="stylesheet" type="text/css" href="static/logiblock/outbreak.css" media="screen"/>
+
+	<style type="text/css">
+		body, span, div, ol, ul, li, p
+		{
+			margin: 0;
+			padding: 0;
+			border: 0;
+			vertical-align: baseline;
+		}
+		ol, ul
+		{
+			list-style: none;
+		}
+
+		body
+		{
+			width: 100%;
+			height: 100%;
+		}
+
+		.section
+		{
+			width: auto;
+			margin-left: 20px;
+			margin-right: 20px;
+		}
+
+		ul.list
+		{
+			width: 500px;
+		}
+
+		ul.list li
+		{
+			width: 100%;
+		}
+
+		#updates
+		{
+			margin-top: 40px;
+		}
+	</style>
+
+</head>
+
+<body>
+	<div class="section" id="updates">
+		<div class="break">
+			<ul class="list thumbnails break"></ul>
+		</div>
+	</div>
+	
+	<script type="application/javascript">
+		
+		var gui = require("nw.gui");
+		
+		document.getElementById("devConsole").onclick = function(e)
+		{
+			gui.Window.get().showDevTools();
+			return(false);
+		};
+	</script>
+
+	<script src="static/jquery-1.7.2/jquery-1.7.2.min.js" type="application/javascript" charset="utf-8"></script>
+	<script src="static/underscore-1.4.4/underscore-1.4.4.min.js" type="application/javascript" charset="utf-8"></script>
+	<script src="static/bootstrap-2.3.1/bootstrap-2.3.1.min.js" type="application/javascript" charset="utf-8"></script>
+	
+	<script src="Launchupdate.js" type="application/javascript" charset="utf-8"></script>
+
+</body>
+</html>
