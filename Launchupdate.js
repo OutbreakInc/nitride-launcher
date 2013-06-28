@@ -122,6 +122,12 @@ function getLatestLocalInstallation($parent, predecessor, owner, moduleName, des
 		}));
 }
 
+process.on("uncaughtException", function(exception)
+{
+	console.warn("Installation error!", exception.stack);
+	showAlert("Uncaught exception. Please check the log for details.")
+});
+
 $(function()
 {
 	var $view = $("#updates");
@@ -153,7 +159,8 @@ $(function()
 		var ideHome = Path.join(dirs[2], mainURL) + "?from=" + escape(window.location) + "&ver=" + package.version;
 		console.log("will navigate to: ", ideHome);
 
-		//window.location = ideHome;
+		window.location = ideHome;
+
 	}).fail(function(e)
 	{
 		$("#title").html("Installation failed!");
