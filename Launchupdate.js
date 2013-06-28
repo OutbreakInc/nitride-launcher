@@ -1,6 +1,11 @@
+var fs = require("fs");
+var Path = require("path");
 var Moduleverse = require("moduleverse");	//Moduleverse.debug(true);
 var Config = require("./Config");
 var Q = require("q");
+var package = require("./package.json");
+
+__dirname = Path.dirname(unescape(window.location.pathname));
 
 _.templateSettings =
 {
@@ -9,6 +14,21 @@ _.templateSettings =
 	escape: /\{\{\{(.+?)\}\}\}/g
 };
 
+function showUpdateUI()
+{
+	$("#title").html("Installing updates...");
+	$("#updates").show();
+}
+
+function showAlert(message)
+{
+	var $el = $("#alert")
+	$(".message", $el).html(message);
+	$el.show();
+	$("#updates").show();
+}
+
+
 function DownloadProgress($parent, predecessor, owner, moduleName, version)
 {
 	var owner = owner;
@@ -16,7 +36,7 @@ function DownloadProgress($parent, predecessor, owner, moduleName, version)
 	var version = version;
 	var promise = Q.defer();
 
-	var $line = $('<li><div class="progress progress-striped"><div class="bar" style="width: 100%;"></div></div><h3 class="moduleName"></h3></li>');
+	var $line = $('<li><div class="progress progress-striped"><div class="bar" style="width: 100%;"></div></div><h4 class="moduleName"></h4></li>');
 	
 	var status =
 	{
@@ -66,6 +86,8 @@ function DownloadProgress($parent, predecessor, owner, moduleName, version)
 			$(".lastFile", $line).html("<em>error!</em>");
 			$("div.bar", $line).addClass("bar-danger");
 			clearInterval(uiUpdate);
+
+			showAlert("One or more critical modules need to be installed to start up, and they could not be downloaded.  You must have an internet conenction to update.");
 			promise.reject();
 		});
 	};
@@ -85,6 +107,21 @@ function DownloadProgress($parent, predecessor, owner, moduleName, version)
 }
 
 
+function getLatestLocalInstallation($parent, predecessor, owner, moduleName, desiredVersion, moduleNameOverride)
+{
+	return(Moduleverse.findLocalInstallation(Config.baseDir(), owner, moduleName, desiredVersion, moduleNameOverride)
+		.then(function(module)
+		{
+			if(module == undefined)
+			{
+				showUpdateUI();
+				return(DownloadProgress($parent, predecessor, owner, moduleName, desiredVersion, moduleNameOverride));
+			}
+			else
+				return(module.__path);
+		}));
+}
+
 $(function()
 {
 	var $view = $("#updates");
@@ -92,21 +129,36 @@ $(function()
 
 	var updates = [];
 	var p = Q.defer();
-	updates.unshift(DownloadProgress($list, p.promise, "logiblock", "nitride"));
-	updates.unshift(DownloadProgress($list, updates[0], "logiblock", "platform"));
-	updates.unshift(DownloadProgress($list, updates[0], "logiblock", Config.sdkName()));
+
+	updates.unshift(getLatestLocalInstallation($list, p.promise, "logiblock", "nitride"));
+	updates.unshift(getLatestLocalInstallation($list, updates[0], "logiblock", "platform"));
+	updates.unshift(getLatestLocalInstallation($list, updates[0], "logiblock", Config.sdkName()));
 
 	p.resolve();	//kick it off
 
 	Q.all(updates).then(function(dirs)
 	{
-		var ideHome = dirs[2] + "/IDE.html";
-		console.log("set complete, would navigate to: ", ideHome);
+		$("#title").html("Launching...");
 
-		setTimeout(function()
+		var mainURL;
+		try
 		{
-			//go!
-			window.location = ideHome;
-		}, 500);
+			mainURL = require(Path.join(dirs[2], "package.json")).main;
+		}
+		catch(e)
+		{
+			showAlert("Could not start the IDE due to an invalid package file.");
+		}
+
+		var ideHome = Path.join(dirs[2], mainURL) + "?from=" + escape(window.location) + "&ver=" + package.version;
+		console.log("will navigate to: ", ideHome);
+
+		//window.location = ideHome;
+	}).fail(function(e)
+	{
+		$("#title").html("Installation failed!");
+
+		console.warn("Installation error!", e.stack);
+		showAlert("There was an internal problem during the installation of updates. Please check the log for details.");
 	});
 });

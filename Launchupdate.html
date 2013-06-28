@@ -56,8 +56,18 @@
 </head>
 
 <body>
-	<div class="section" id="updates">
-		<div class="break">
+	<div class="section">
+		<div>
+			<button id="devConsole" class="btn pull-right"><span class="icon-cog"></span></button>
+			<h3 id="title">Checking installation...</h3>
+		</div>
+		<hr class="break"/>
+		<div id="alert" class="alert alert-block alert-error" style="display:none">
+			<h4>Error</h4>
+			There was an error during the update process: &quot;<span class="message">(unknown)</span>&quot; Please check back later for an update or visit
+			<a href="http://logiblock.com/help" target="_blank">logiblock.com/help</a> for help.
+		</div>
+		<div id="updates" class="break" style="display:none">
 			<ul class="list thumbnails break"></ul>
 		</div>
 	</div>
