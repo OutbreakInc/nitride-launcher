@@ -7,12 +7,9 @@ var package = require("./package.json");
 
 __dirname = Path.dirname(unescape(window.location.pathname));
 
-_.templateSettings =
-{
-	evaluate: /\{\{:(.+?)\}\}/g,
-	interpolate: /\{\{([^:].+?)\}\}/g,
-	escape: /\{\{\{(.+?)\}\}\}/g
-};
+//identify
+var package = require(Path.join(__dirname, "package.json"));
+gui.Window.get().title = "Logiblock IDE Launcher " + package.version;
 
 function showUpdateUI()
 {
