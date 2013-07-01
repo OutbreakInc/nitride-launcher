@@ -37,6 +37,7 @@ function DownloadProgress($parent, predecessor, owner, moduleName, version)
 	
 	var status =
 	{
+		version: "",
 		progress: undefined,
 		file: ""
 	};
@@ -49,6 +50,7 @@ function DownloadProgress($parent, predecessor, owner, moduleName, version)
 			$("div.bar", $line).css("width", (status.progress * 100).toFixed(0) + "%");
 		}
 		$(".lastFile", $line).html(status.file);
+		$(".moduleName", $line).html(owner + "/" + moduleName + ' <small>' + status.version + '</small>');
 	};
 	var uiUpdate = setInterval(render, 500);
 	
@@ -57,7 +59,7 @@ function DownloadProgress($parent, predecessor, owner, moduleName, version)
 		var updater = new Moduleverse.ModuleUpdater(Config.baseDir(), owner, moduleName, version);
 		updater.on("version", function(ver)
 		{
-			//status.version = ver;	//@@not supported yet
+			status.version = ver;
 		})
 		.on("progress", function(loaded, total)
 		{
@@ -84,13 +86,14 @@ function DownloadProgress($parent, predecessor, owner, moduleName, version)
 			$("div.bar", $line).addClass("bar-danger");
 			clearInterval(uiUpdate);
 
+			render();
 			showAlert("One or more critical modules need to be installed to start up, and they could not be downloaded.  You must have an internet conenction to update.");
 			promise.reject();
 		});
 	};
 
 
-	$(".moduleName", $line).html(owner + "/" + moduleName);
+	render();
 
 	$parent.append($line);
 
