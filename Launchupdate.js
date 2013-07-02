@@ -122,10 +122,14 @@ function getLatestLocalInstallation($parent, predecessor, owner, moduleName, des
 		}));
 }
 
+var launched = false;
 process.on("uncaughtException", function(exception)
 {
-	console.warn("Installation error!", exception.stack);
-	showAlert("Uncaught exception. Please check the log for details.")
+	if(!launched && console)
+	{
+		console.warn("Installation error!", exception.stack);
+		showAlert("Uncaught exception. Please check the log for details.");
+	}
 });
 
 $(function()
@@ -159,6 +163,7 @@ $(function()
 		var ideHome = Path.join(dirs[2], mainURL) + "?from=" + escape(window.location) + "&ver=" + package.version;
 		console.log("will navigate to: ", ideHome);
 
+		launched = true;
 		window.location = ideHome;
 
 	}).fail(function(e)
