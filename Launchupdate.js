@@ -2,14 +2,14 @@ var fs = require("fs");
 var Path = require("path");
 var Moduleverse = require("moduleverse");	//Moduleverse.debug(true);
 var Config = require("./Config");
-var Q = require("q");
+var Q = require("noq");
 var package = require("./package.json");
 
 __dirname = Path.dirname(unescape(window.location.pathname));
 
 //identify
 var package = require(Path.join(__dirname, "package.json"));
-gui.Window.get().title = "Logiblock IDE Launcher " + package.version;
+document.title = "Logiblock IDE Launcher " + package.version;
 
 function showUpdateUI()
 {
