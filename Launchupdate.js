@@ -7,6 +7,9 @@ var package = require("./package.json");
 
 __dirname = Path.dirname(unescape(window.location.pathname));
 
+if(__dirname.indexOf(":") > 0)	//Windows has malformed local urls, fix them by lopping off an unneeded slash
+	__dirname = __dirname.substr(1);
+
 //identify
 var package = require(Path.join(__dirname, "package.json"));
 document.title = "Logiblock IDE Launcher " + package.version;
