@@ -4,7 +4,11 @@
 	"private": true,
 	"description": "Logiblock IDE Launch/auto-update component",
 	"license": "Proprietary",
-
+	"repository":
+	{
+		"type" : "git",
+		"url": "https://github.com/OutbreakInc/nitride-launcher"
+	},
 	"main": "Launchupdate.html",
 	"window":
 	{
